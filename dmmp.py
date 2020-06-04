@@ -321,3 +321,21 @@ def mpaths_get():
     for mpath in all_data["maps"]:
         rc.append(DMMP_mpath(mpath))
     return rc
+
+def mpath_resize(wwid):
+    ''' 
+    Usage:
+        Resize a multipath device given by wwid.
+    Parameters:
+        wwid (str): wwid of multipath device
+    Return:
+        return value of resizing
+    '''
+
+    s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    s.settimeout(60)
+    s.connect(_IPC_ADDR)
+    return_value = _ipc_exec(s, f"resize map {wwid}")
+    s.close()
+
+    return return_value.splitlines()[0]
